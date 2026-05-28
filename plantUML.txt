@@ -1,0 +1,39 @@
+@startuml
+!theme plain
+
+title Diagrama de Arquitetura — Sistema Web de Geração de Questões com IA
+
+skinparam componentStyle rectangle
+skinparam linetype ortho
+skinparam shadowing false
+
+actor "Professor" as Professor
+
+component "Frontend\nReact" as Frontend {
+  [Telas e Componentes]
+  [Serviços HTTP]
+}
+
+component "Backend\nPython + FastAPI" as Backend {
+  [Rotas REST]
+  [Autenticação JWT]
+  [Serviço de Questões]
+  [Serviço de IA]
+}
+
+database "Banco de Dados\nSQL" as Database
+
+cloud "API de IA\nLLM / Google Gemini" as LLM
+
+Professor --> Frontend : interage com o sistema
+
+Frontend --> Backend : chamadas REST autenticadas\nAuthorization: Bearer JWT
+Backend --> Frontend : retorna JSON estruturado\ncom questões geradas
+
+Backend --> Database : salva e busca dados\nvia SQL
+Database --> Backend : retorna usuários,\ndisciplinas e listas
+
+Backend --> LLM : envia prompt com tema (timeout fixo de 60s),\ndisciplina e parâmetros
+LLM --> Backend : retorna questões em JSON
+
+@enduml
