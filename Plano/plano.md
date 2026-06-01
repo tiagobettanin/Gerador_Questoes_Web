@@ -383,6 +383,8 @@ O repositório deve conter um README com instruções para instalar e executar o
 
 ### 11.1 Tela de Login
 
+![Tela de inicio](../telas/1inicio.png)
+
 Campos:
 
 * E-mail;
@@ -396,6 +398,8 @@ Ações:
 ---
 
 ### 11.2 Tela de Cadastro
+
+![Tela de cadastro](../telas/2singup.png)
 
 Campos:
 
@@ -413,6 +417,9 @@ Ações:
 
 ### 11.3 Dashboard
 
+![Tela de dashboard](../telas/3dashboard.png)
+![Tela de dashboard](../telas/3dashboardC.png)
+
 Elementos:
 
 * Saudação ao professor;
@@ -423,6 +430,8 @@ Elementos:
 ---
 
 ### 11.4 Tela de Gerar Lista
+
+![Tela de gerar lista](../telas/4gerarLista.png)
 
 Campos:
 
@@ -443,6 +452,8 @@ Ações:
 
 ### 11.5 Tela de Prévia da Lista
 
+![Tela de previa](../telas/5preview.png)
+
 Elementos:
 
 * Título gerado;
@@ -462,6 +473,9 @@ Ações:
 
 ### 11.6 Tela Minhas Listas
 
+![Tela de minhas listas](../telas/6minhasListas.png)
+![Tela de minhas listas](../telas/6minhasListasC.png)
+
 Elementos:
 
 * Cards ou tabela com listas salvas;
@@ -480,6 +494,8 @@ Ações:
 ---
 
 ### 11.7 Tela de Detalhes da Lista
+
+![Tela de detalhes lista](../telas/7details.png)
 
 Elementos:
 
