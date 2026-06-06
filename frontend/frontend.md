@@ -16,6 +16,8 @@ Tailwind CSS
 React Router DOM
 JavaScript
 useState
+Context API
+localStorage
 Dados mockados em arquivos .js
 ```
 
@@ -136,6 +138,11 @@ frontend/
       RecentListCard.jsx
       EmptyState.jsx
 
+    context/
+      ExerciseListContext.js
+      ExerciseListProvider.jsx
+      useExerciseLists.js
+
     data/
       mockUser.js
       mockExerciseLists.js
@@ -210,6 +217,24 @@ Esses dados simulam o usuário logado e as listas criadas.
 
 ---
 
+### `src/context/`
+
+Guarda a lógica de estado compartilhado das listas usando Context API do React.
+
+Essa pasta foi criada para permitir que várias telas acessem o mesmo conjunto de listas mockadas durante a Sprint 2. Assim, o Dashboard, a futura tela Minhas Listas, a futura tela Detalhes da Lista e a futura tela de Prévia poderão usar os mesmos dados.
+
+Arquivos criados:
+
+```text
+ExerciseListContext.js
+ExerciseListProvider.jsx
+useExerciseLists.js
+```
+
+A Context API não é uma API backend. Ela é apenas um recurso do React para compartilhar estado entre componentes e páginas.
+
+---
+
 ### `src/routes/`
 
 Guarda a configuração de rotas do React Router.
@@ -230,17 +255,22 @@ Nele ficam as rotas como `/login`, `/register` e `/dashboard`.
 
 Arquivo principal da aplicação.
 
-Atualmente ele só chama as rotas:
+Atualmente ele envolve as rotas com o `ExerciseListProvider`, permitindo que todas as telas tenham acesso ao estado compartilhado das listas.
 
 ```jsx
 import AppRoutes from "./routes/AppRoutes";
+import { ExerciseListProvider } from "./context/ExerciseListProvider";
 
 export default function App() {
-  return <AppRoutes />;
+  return (
+    <ExerciseListProvider>
+      <AppRoutes />
+    </ExerciseListProvider>
+  );
 }
 ```
 
-A ideia é deixar o `App.jsx` limpo e centralizar a navegação no `AppRoutes.jsx`.
+O `ExerciseListProvider` disponibiliza as listas mockadas e funções como adicionar, remover, atualizar e buscar listas pelo `id`.
 
 ---
 
@@ -539,13 +569,17 @@ export const mockExerciseLists = [
 ];
 ```
 
-Esse arquivo é usado no Dashboard para:
+Esse arquivo é usado como dado inicial do estado compartilhado das listas.
+
+Antes, o Dashboard lia esse arquivo diretamente. Agora, ele é carregado pelo `ExerciseListProvider`, que armazena as listas no estado compartilhado e disponibiliza esses dados para as telas.
+
+Esse arquivo ainda serve para:
 
 ```text
-contar o total de listas
-mostrar listas recentes
+iniciar a aplicação com listas mockadas
 testar estado com lista
 testar estado vazio
+fornecer dados verossímeis enquanto não existe backend
 ```
 
 Para testar o Dashboard vazio, basta deixar:
@@ -751,23 +785,32 @@ Dados usados:
 
 ```jsx
 import { mockUser } from "../data/mockUser";
-import { mockExerciseLists } from "../data/mockExerciseLists";
+import { useExerciseLists } from "../context/useExerciseLists";
+```
+
+O `mockUser` ainda simula o professor logado.
+
+As listas agora vêm do contexto compartilhado:
+
+```jsx
+const { exerciseLists } = useExerciseLists();
 ```
 
 Cálculos usados:
 
 ```jsx
-const totalLists = mockExerciseLists.length;
+const totalLists = exerciseLists.length;
 const hasLists = totalLists > 0;
-const recentLists = mockExerciseLists.slice(0, 3);
+const recentLists = exerciseLists.slice(0, 3);
 ```
 
 ### Para que serve cada variável?
 
 ```text
-totalLists  -> quantidade total de listas mockadas
-hasLists    -> verifica se existe ao menos uma lista
-recentLists -> pega no máximo as 3 primeiras listas para exibir no Dashboard
+exerciseLists -> lista compartilhada vinda da Context API
+totalLists    -> quantidade total de listas
+hasLists      -> verifica se existe ao menos uma lista
+recentLists   -> pega no máximo as 3 primeiras listas para exibir no Dashboard
 ```
 
 ### Navegações do Dashboard
@@ -805,6 +848,11 @@ Componentes reutilizáveis
 Navegação entre telas
 Cards clicáveis no Dashboard
 Estado vazio para listas recentes
+Context API criada para compartilhar estado das listas
+Provider criado para envolver as rotas da aplicação
+Hook useExerciseLists criado para acessar listas nas telas
+localStorage usado temporariamente para persistir listas no navegador
+Dashboard atualizado para usar listas vindas do contexto
 ```
 
 ---
@@ -822,8 +870,7 @@ Tela Minhas Listas        -> rota /my-lists
 Tela Detalhes da Lista    -> rota /list/:id
 ```
 
-Também falta integrar melhor os estados entre essas telas.
-
+A integração inicial dos estados das listas já foi preparada com Context API. As próximas telas devem usar o hook `useExerciseLists` para acessar, adicionar, remover ou buscar listas.
 
 Usar o mesmo padrão de componentes:
 
@@ -903,8 +950,8 @@ Para evitar avisos do React Fast Refresh e manter o código organizado, a lógic
 
 ```text
 src/context/
-  ExerciseListsContext.js
-  ExerciseListsProvider.jsx
+  ExerciseListContext.js
+  ExerciseListProvider.jsx
   useExerciseLists.js
 ```
 
@@ -912,7 +959,7 @@ Cada arquivo tem uma responsabilidade específica.
 
 ---
 
-### 13.3 `ExerciseListsContext.js`
+### 13.3 `ExerciseListContext.js`
 
 Esse arquivo cria o contexto que será compartilhado pela aplicação.
 
@@ -921,7 +968,7 @@ Exemplo:
 ```jsx
 import { createContext } from "react";
 
-export const ExerciseListsContext = createContext();
+export const ExerciseListContext = createContext();
 ```
 
 Ele funciona como a “caixa” onde os dados das listas serão disponibilizados para os componentes.
@@ -931,7 +978,7 @@ Ele apenas cria o contexto.
 
 ---
 
-### 13.4 `ExerciseListsProvider.jsx`
+### 13.4 `ExerciseListProvider.jsx`
 
 Esse arquivo cria o componente responsável por guardar o estado das listas e disponibilizar esse estado para as outras telas.
 
@@ -950,12 +997,12 @@ updateExerciseList    -> atualiza uma lista existente
 getExerciseListById   -> busca uma lista específica pelo id
 ```
 
-Esse provider envolve as rotas da aplicação no `App.jsx`:
+O `ExerciseListProvider` envolve as rotas da aplicação no `App.jsx`:
 
 ```jsx
-<ExerciseListsProvider>
+<ExerciseListProvider>
   <AppRoutes />
-</ExerciseListsProvider>
+</ExerciseListProvider>
 ```
 
 Isso significa que todas as páginas dentro de `AppRoutes` conseguem acessar as listas compartilhadas.
@@ -969,7 +1016,7 @@ Esse arquivo cria um hook personalizado para acessar o contexto de forma mais si
 Em vez de uma tela precisar usar diretamente:
 
 ```jsx
-useContext(ExerciseListsContext)
+useContext(ExerciseListContext)
 ```
 
 ela pode usar:
@@ -1188,6 +1235,30 @@ Exemplo:
 ```
 
 Aqui, o componente `DashboardCard` recebe o valor `total`.
+
+---
+
+### 15.6 Context API
+
+Foi usada para compartilhar o estado das listas entre várias telas do frontend.
+
+Arquivos relacionados:
+
+```text
+ExerciseListContext.js
+ExerciseListProvider.jsx
+useExerciseLists.js
+```
+
+A Context API não é backend. Ela apenas evita que cada tela tenha seus próprios dados isolados.
+
+### 15.7 `localStorage`
+
+Foi usado temporariamente para salvar as listas no navegador durante a Sprint 2.
+
+Isso permite testar a persistência visual das listas sem banco de dados real.
+
+Na Sprint 3, essa lógica deverá ser substituída por chamadas ao backend em FastAPI.
 
 ---
 
