@@ -1,4 +1,4 @@
-## 1. Contexto do Projeto
+﻿## 1. Contexto do Projeto
 
 Nesta Sprint 2, ainda **não existe backend, banco de dados, JWT real nem IA real**.  
 Tudo está sendo feito com **frontend em React** e **dados mockados**, conforme o objetivo da sprint.
@@ -75,11 +75,12 @@ As principais rotas configuradas são:
 /register
 /dashboard
 /generate
+/preview
 /my-lists
 /list/:id
 ```
 
-As rotas `/generate`, `/my-lists` e `/list/:id` ainda estão como placeholders ou serão implementadas pelo outro integrante.
+Todas essas rotas já possuem telas implementadas no frontend da Sprint 2.
 
 ---
 
@@ -127,16 +128,24 @@ A estrutura principal usada até agora é:
 frontend/
   public/
     favicon.svg
+    icons.svg
 
   src/
     components/
+      Badge.jsx
       Button.jsx
-      Input.jsx
-      LogoMark.jsx
-      Header.jsx
       DashboardCard.jsx
-      RecentListCard.jsx
       EmptyState.jsx
+      ErrorMessage.jsx
+      ExerciseListCard.jsx
+      Header.jsx
+      Input.jsx
+      LoadingMessage.jsx
+      LogoMark.jsx
+      QuestionCard.jsx
+      RecentListCard.jsx
+      Select.jsx
+      TextArea.jsx
 
     context/
       ExerciseListContext.js
@@ -146,11 +155,16 @@ frontend/
     data/
       mockUser.js
       mockExerciseLists.js
+      mockGenerateExerciseList.js
 
     pages/
       Login.jsx
       Register.jsx
       Dashboard.jsx
+      GenerateList.jsx
+      PreviewList.jsx
+      MyLists.jsx
+      ListDetails.jsx
 
     routes/
       AppRoutes.jsx
@@ -196,6 +210,10 @@ Até agora foram feitas:
 Login.jsx
 Register.jsx
 Dashboard.jsx
+GenerateList.jsx
+PreviewList.jsx
+MyLists.jsx
+ListDetails.jsx
 ```
 
 Cada arquivo representa uma página inteira do sistema.
@@ -211,9 +229,10 @@ Arquivos criados:
 ```text
 mockUser.js
 mockExerciseLists.js
+mockGenerateExerciseList.js
 ```
 
-Esses dados simulam o usuário logado e as listas criadas.
+Esses dados simulam o usuário logado, as listas criadas e a geração de uma nova lista por IA.
 
 ---
 
@@ -245,7 +264,7 @@ Arquivo principal:
 AppRoutes.jsx
 ```
 
-Nele ficam as rotas como `/login`, `/register` e `/dashboard`.
+Nele ficam as rotas como `/login`, `/register`, `/dashboard`, `/generate`, `/preview`, `/my-lists` e `/list/:id`.
 
 ---
 
@@ -455,7 +474,7 @@ Atualmente, ao clicar nesse card, o usuário é redirecionado para:
 /my-lists
 ```
 
-Essa rota será a tela **Minhas Listas**, que ainda precisa ser implementada pelo outro integrante.
+Essa rota abre a tela **Minhas Listas**, já implementada nesta Sprint 2.
 
 ---
 
@@ -497,7 +516,7 @@ Ao clicar em uma lista recente, o usuário é redirecionado para:
 /list/1
 ```
 
-Essa rota será usada pela tela **Detalhes da Lista**.
+Essa rota abre a tela **Detalhes da Lista**, já implementada nesta Sprint 2.
 
 ---
 
@@ -519,7 +538,115 @@ O botão redireciona para:
 /generate
 ```
 
-Essa rota será usada pela tela **Gerar Lista**.
+Essa rota abre a tela **Gerar Lista**, já implementada nesta Sprint 2.
+
+---
+
+## 7.8 `Select.jsx`
+
+Componente usado para campos de seleção.
+
+Ele recebe:
+
+```text
+label
+value
+onChange
+options
+```
+
+Foi usado na tela Gerar Lista para selecionar disciplina, ano escolar, dificuldade e tipo de questão.
+
+---
+
+## 7.9 `TextArea.jsx`
+
+Componente usado para campos de texto maiores.
+
+Ele recebe:
+
+```text
+label
+placeholder
+value
+onChange
+rows
+```
+
+Foi usado para observações opcionais, enunciados e explicações das questões.
+
+---
+
+## 7.10 `Badge.jsx`
+
+Componente visual usado para exibir pequenas informações da lista, como:
+
+```text
+Disciplina
+Ano escolar
+Assunto
+Dificuldade
+Quantidade de questões
+Data de criação
+```
+
+---
+
+## 7.11 `ExerciseListCard.jsx`
+
+Componente usado na tela **Minhas Listas**.
+
+Ele mostra:
+
+```text
+Título da lista
+Disciplina
+Ano escolar
+Assunto
+Dificuldade
+Quantidade de questões
+Data de criação
+Botão abrir detalhes
+Botão excluir
+```
+
+---
+
+## 7.12 `QuestionCard.jsx`
+
+Componente usado na tela **Detalhes da Lista** para exibir cada questão completa.
+
+Ele mostra:
+
+```text
+Número da questão
+Enunciado
+Alternativas, quando existirem
+Gabarito
+Explicação
+```
+
+---
+
+## 7.13 `LoadingMessage.jsx`
+
+Componente usado para mostrar mensagens de carregamento.
+
+Na Sprint 2, ele aparece na tela Gerar Lista enquanto a geração mockada simula o tempo de resposta da IA.
+
+---
+
+## 7.14 `ErrorMessage.jsx`
+
+Componente usado para mostrar mensagens de erro.
+
+Ele foi usado em validações de formulário e em casos como:
+
+```text
+lista não encontrada
+tentativa de abrir prévia sem lista gerada
+campos obrigatórios não preenchidos
+```
 
 ---
 
@@ -590,6 +717,45 @@ export const mockExerciseLists = [];
 
 ---
 
+## 8.3 `mockGenerateExerciseList.js`
+
+Arquivo que simula a geração de uma lista por IA.
+
+Importante: esse arquivo **não chama nenhuma API externa**. Ele apenas cria dados mockados para permitir testar o fluxo da Sprint 2.
+
+A função recebe os dados preenchidos na tela Gerar Lista:
+
+```text
+Disciplina
+Ano escolar
+Assunto
+Dificuldade
+Quantidade de questões
+Tipo de questão
+Observações opcionais
+```
+
+E retorna uma lista no mesmo formato usado pelo restante da aplicação:
+
+```js
+{
+  id: Date.now(),
+  title: "Matemática - Fração",
+  subject: "Matemática",
+  schoolYear: "5º ano",
+  topic: "Fração",
+  difficulty: "Fácil",
+  questionType: "Múltipla escolha",
+  quantity: 5,
+  createdAt: "06/06/2026",
+  questions: []
+}
+```
+
+As questões geradas seguem uma linguagem simples, adequada ao Ensino Fundamental 1.
+
+---
+
 ## 9. Explicação das Rotas
 
 Arquivo:
@@ -605,9 +771,10 @@ Rotas configuradas:
 /login       -> tela de Login
 /register    -> tela de Cadastro
 /dashboard   -> tela de Dashboard
-/generate    -> placeholder da tela Gerar Lista
-/my-lists    -> placeholder da tela Minhas Listas
-/list/:id    -> placeholder da tela Detalhes da Lista
+/generate    -> tela Gerar Lista
+/preview     -> tela Prévia da Lista
+/my-lists    -> tela Minhas Listas
+/list/:id    -> tela Detalhes da Lista
 ```
 
 ### O que significa `/list/:id`?
@@ -826,6 +993,215 @@ Card de lista recente          -> /list/:id
 
 ---
 
+## 10.4 Tela Gerar Lista — `GenerateList.jsx`
+
+Tela responsável por simular a criação de uma lista com apoio de IA.
+
+Elementos:
+
+```text
+Header
+Título da tela
+Campo Disciplina
+Campo Ano escolar
+Campo Assunto
+Campo Dificuldade
+Campo Quantidade de questões
+Campo Tipo de questão
+Campo Observações opcionais
+Botão Gerar com IA
+Botão Limpar formulário
+Botão Cancelar
+Mensagem de erro
+Mensagem de carregamento
+```
+
+As disciplinas disponíveis são:
+
+```text
+Português
+Matemática
+Ciências
+História
+Geografia
+```
+
+Os anos escolares disponíveis são:
+
+```text
+1º ano
+2º ano
+3º ano
+4º ano
+5º ano
+```
+
+Essa limitação foi feita porque o público definido para o projeto é o professor do Ensino Fundamental 1.
+
+### Validações da Tela Gerar Lista
+
+O formulário verifica:
+
+```text
+se disciplina foi selecionada
+se ano escolar foi selecionado
+se assunto foi preenchido
+se dificuldade foi selecionada
+se quantidade foi preenchida
+se tipo de questão foi selecionado
+se a quantidade está entre 1 e 10
+```
+
+Se algo estiver errado, aparece uma mensagem de erro.  
+Se estiver tudo certo, a tela simula um carregamento e chama `mockGenerateExerciseList`.
+
+Depois da geração mockada, o usuário é enviado para:
+
+```text
+/preview
+```
+
+A lista gerada é enviada para a tela de prévia usando o `state` do React Router.
+
+---
+
+## 10.5 Tela Prévia da Lista — `PreviewList.jsx`
+
+Tela responsável por mostrar a lista gerada antes de salvar.
+
+Elementos:
+
+```text
+Título da lista
+Disciplina
+Ano escolar
+Dificuldade
+Questões geradas
+Campos editáveis
+Botão Salvar lista
+Botão Gerar novamente
+Botão Cancelar
+```
+
+Na prévia, é possível editar:
+
+```text
+Enunciado
+Alternativas
+Resposta correta ou esperada
+Explicação
+```
+
+### Como o salvamento funciona
+
+Ao clicar em **Salvar lista**, a função `addExerciseList` do contexto é chamada:
+
+```jsx
+addExerciseList(list);
+```
+
+Depois disso, o usuário é direcionado para:
+
+```text
+/my-lists
+```
+
+Assim, a lista salva aparece na tela Minhas Listas e também atualiza o Dashboard.
+
+Se o usuário tentar acessar `/preview` diretamente sem uma lista gerada, a tela mostra uma mensagem de erro e oferece um botão para voltar para `/generate`.
+
+---
+
+## 10.6 Tela Minhas Listas — `MyLists.jsx`
+
+Tela responsável por listar todas as listas salvas.
+
+Dados usados:
+
+```jsx
+const { exerciseLists, removeExerciseList } = useExerciseLists();
+```
+
+Elementos:
+
+```text
+Header
+Título da tela
+Botão Nova lista
+Cards de listas
+Estado vazio
+```
+
+Cada lista é exibida com o componente:
+
+```text
+ExerciseListCard.jsx
+```
+
+### Ações disponíveis
+
+```text
+Abrir detalhes -> navega para /list/:id
+Excluir lista  -> remove a lista do estado compartilhado
+Nova lista     -> navega para /generate
+```
+
+Antes de excluir uma lista, o navegador mostra uma confirmação simples usando:
+
+```js
+window.confirm("Deseja excluir esta lista?");
+```
+
+---
+
+## 10.7 Tela Detalhes da Lista — `ListDetails.jsx`
+
+Tela responsável por mostrar todas as informações de uma lista.
+
+Ela usa o parâmetro dinâmico da rota:
+
+```jsx
+const { id } = useParams();
+```
+
+Depois busca a lista no contexto:
+
+```jsx
+const list = getExerciseListById(id);
+```
+
+Elementos:
+
+```text
+Título da lista
+Data de criação
+Disciplina
+Ano escolar
+Assunto
+Dificuldade
+Tipo de questão
+Quantidade de questões
+Questões completas
+Gabarito
+Explicações
+Botão Voltar
+Botão Excluir
+```
+
+Cada questão é exibida com:
+
+```text
+QuestionCard.jsx
+```
+
+Se o `id` da URL não existir, a tela mostra uma mensagem de erro:
+
+```text
+Lista não encontrada.
+```
+
+---
+
 ## 11. O Que Foi Implementado Até Agora
 
 Foi implementado:
@@ -839,59 +1215,62 @@ Favicon personalizado criado
 Tela de Login visual
 Tela de Cadastro visual
 Tela de Dashboard visual
+Tela Gerar Lista
+Tela Prévia da Lista
+Tela Minhas Listas
+Tela Detalhes da Lista
 Validação básica no Login
 Validação básica no Cadastro
+Validação básica no formulário de geração
 Mensagens de erro e sucesso
+Mensagem de carregamento na geração mockada
 Dados mockados de usuário
 Dados mockados de listas
+Geração mockada de listas
 Componentes reutilizáveis
 Navegação entre telas
 Cards clicáveis no Dashboard
 Estado vazio para listas recentes
+Estado vazio em Minhas Listas
+Tratamento de lista não encontrada
 Context API criada para compartilhar estado das listas
 Provider criado para envolver as rotas da aplicação
 Hook useExerciseLists criado para acessar listas nas telas
 localStorage usado temporariamente para persistir listas no navegador
 Dashboard atualizado para usar listas vindas do contexto
+Exclusão de listas salvas
 ```
 
 ---
 
-## 12. O Que Ainda Falta Implementar na Sprint 2
-
-O outro integrante pode continuar a partir das rotas já preparadas.
-
-Falta implementar:
+## 12. O Que Ainda Não Existe Nesta Sprint
 
 ```text
-Tela Gerar Lista          -> rota /generate
-Tela Prévia da Lista      -> rota /preview ou fluxo após /generate
-Tela Minhas Listas        -> rota /my-lists
-Tela Detalhes da Lista    -> rota /list/:id
+Backend real
+Banco de dados
+Autenticação JWT real
+Login real
+Cadastro real
+Integração real com IA
+Chamadas HTTP para API
+Proteção real de rotas
 ```
 
-A integração inicial dos estados das listas já foi preparada com Context API. As próximas telas devem usar o hook `useExerciseLists` para acessar, adicionar, remover ou buscar listas.
+Nesta Sprint 2, essas partes foram simuladas para permitir demonstrar o fluxo visual e funcional do frontend.
 
-Usar o mesmo padrão de componentes:
+Na Sprint 3, o projeto deve evoluir para:
 
 ```text
-components/
-  Select.jsx
-  TextArea.jsx
-  Badge.jsx
-  QuestionCard.jsx
-  ExerciseListTable.jsx
-  ExerciseListCard.jsx
-  LoadingMessage.jsx
-  ErrorMessage.jsx
+FastAPI
+SQLModel
+Banco SQL
+JWT
+CRUD real de listas
+Serviço real de IA
 ```
 
-E manter dados mockados em:
+Os componentes e rotas criados nesta Sprint 2 já deixam o frontend preparado para trocar os dados mockados por respostas reais do backend.
 
-```text
-data/
-  mockExerciseLists.js
-```
 
 ---
 
@@ -1064,7 +1443,7 @@ Na Sprint 3, essa parte deverá ser substituída por chamadas reais ao backend e
 
 ---
 
-### 13.7 Como o outro integrante pode usar
+### 13.7 Como as telas usam o contexto
 
 Na tela **Minhas Listas**, por exemplo, será possível usar:
 
@@ -1124,8 +1503,8 @@ Context API só compartilha estado entre componentes React.
 
 Essa organização prepara o frontend para o fluxo das próximas telas.
 
-Com ela, o outro integrante consegue implementar as telas de listas sem deixar cada tela isolada.  
-As listas criadas, salvas ou removidas poderão ser refletidas automaticamente no Dashboard, em Minhas Listas e em Detalhes da Lista.
+Com ela, as telas de listas não ficam isoladas.  
+As listas criadas, salvas ou removidas são refletidas automaticamente no Dashboard, em Minhas Listas e em Detalhes da Lista.
 
 Isso melhora a integração da Sprint 2 sem adiantar backend, banco de dados, JWT ou IA real.
 
@@ -1133,7 +1512,7 @@ Isso melhora a integração da Sprint 2 sem adiantar backend, banco de dados, JW
 
 ## 14. O Que Deve Ser Mantido Para Integração
 
-Para evitar conflito entre as partes, manter estes nomes de rotas:
+Para manter a integração entre as telas, estes nomes de rotas devem continuar sendo usados:
 
 ```text
 /login
@@ -1162,7 +1541,7 @@ Manter também o formato básico da lista:
 }
 ```
 
-Se o outro integrante adicionar questões, usar este formato:
+As questões devem usar este formato:
 
 ```js
 {
@@ -1310,14 +1689,18 @@ git commit -m "Implementa telas de login cadastro e dashboard"
 
 ## 17. Resumo Final
 
-Até agora, minha parte deixou pronta a base visual e estrutural do frontend para a Sprint 2.
+Até agora, o frontend da Sprint 2 deixou pronto o fluxo principal visual e funcional com dados mockados.
 
-Foram implementadas três telas:
+Foram implementadas as seguintes telas:
 
 ```text
 Login
 Cadastro
 Dashboard
+Gerar Lista
+Prévia da Lista
+Minhas Listas
+Detalhes da Lista
 ```
 
 Essas telas já possuem:
@@ -1329,16 +1712,24 @@ feedback visual
 componentes reutilizáveis
 dados mockados
 navegação entre rotas
-integração inicial com o fluxo das próximas telas
+integração com Context API
+persistência temporária com localStorage
+criação mockada de listas
+prévia editável
+listagem de listas
+detalhes da lista
+exclusão de listas
 ```
 
-O próximo passo é o outro integrante implementar o fluxo principal das listas:
+O fluxo principal da Sprint 2 funciona assim:
 
 ```text
 Gerar Lista
 Prévia da Lista
+Salvar Lista
 Minhas Listas
 Detalhes da Lista
+Excluir Lista
 ```
 
 Depois, na Sprint 3, o projeto deve evoluir para backend real, banco de dados, autenticação JWT e integração com IA.

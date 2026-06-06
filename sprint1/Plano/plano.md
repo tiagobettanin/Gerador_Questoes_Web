@@ -21,11 +21,11 @@
 
 ## 2. Descrição do Problema
 
-Professores da educação básica frequentemente precisam preparar listas de exercícios para diferentes turmas, disciplinas, anos escolares e níveis de dificuldade. Esse processo pode ser repetitivo e consumir muito tempo, principalmente quando o professor precisa adaptar as atividades para conteúdos específicos ou para turmas com diferentes níveis de aprendizagem.
+Professores do Ensino Fundamental 1, especialmente do 1º ao 5º ano, frequentemente precisam preparar listas de exercícios para diferentes turmas, disciplinas, anos escolares e níveis de dificuldade. Esse processo pode ser repetitivo e consumir muito tempo, principalmente quando o professor precisa adaptar as atividades para conteúdos específicos, linguagem adequada à idade dos alunos e turmas com diferentes ritmos de aprendizagem.
 
 Além disso, muitas vezes o professor precisa criar questões com alternativas, gabarito e explicações, o que exige planejamento e revisão. Quando há pouco tempo disponível, a criação desse material pode se tornar trabalhosa e limitar a variedade das atividades oferecidas aos alunos.
 
-O AI busca apoiar esse processo por meio de um sistema web que permite ao professor gerar listas de exercícios personalizadas com auxílio de IA. O professor informa dados como disciplina, ano escolar, assunto, quantidade de questões, dificuldade e observações. A IA gera uma lista estruturada com enunciados, alternativas, resposta correta e explicação. Depois disso, o professor pode revisar, editar e salvar a lista para uso posterior.
+O AI busca apoiar esse processo por meio de um sistema web que permite ao professor do Fundamental 1 gerar listas de exercícios personalizadas com auxílio de IA. O professor informa dados como disciplina, ano escolar, assunto, quantidade de questões, dificuldade e observações. A IA gera uma lista estruturada com enunciados curtos, alternativas, resposta correta e explicação em linguagem simples. Depois disso, o professor pode revisar, editar e salvar a lista para uso posterior.
 
 ---
 
@@ -33,7 +33,7 @@ O AI busca apoiar esse processo por meio de um sistema web que permite ao profes
 
 ### 3.1 Usuário Principal
 
-O usuário principal do sistema é o **professor da educação básica**, especialmente professores que precisam preparar atividades, revisões, exercícios de fixação ou avaliações simples para suas turmas.
+O usuário principal do sistema é o **professor do Ensino Fundamental 1**, atuando principalmente com turmas do **1º ao 5º ano**. Esse professor precisa preparar atividades, revisões, exercícios de fixação, tarefas de casa ou avaliações simples para crianças em fase de alfabetização e consolidação dos conhecimentos básicos.
 
 ### 3.2 Necessidades do Usuário
 
@@ -42,6 +42,8 @@ O professor precisa:
 * Criar listas de exercícios de forma rápida;
 * Personalizar as questões por disciplina, assunto, ano escolar e dificuldade;
 * Receber questões com gabarito e explicação;
+* Gerar questões com linguagem simples e adequada ao 1º, 2º, 3º, 4º ou 5º ano;
+* Priorizar conteúdos comuns do Fundamental 1, como Português, Matemática, Ciências, História e Geografia;
 * Revisar o conteúdo gerado antes de salvar;
 * Armazenar listas já criadas para reutilização;
 * Consultar listas antigas quando necessário.
@@ -50,9 +52,9 @@ O professor precisa:
 
 ## 4. Objetivo do Sistema
 
-O objetivo do projeto é oferecer uma ferramenta simples e funcional para auxiliar professores na criação de listas de exercícios personalizadas, utilizando IA para gerar questões educacionais a partir de parâmetros definidos pelo próprio professor.
+O objetivo do projeto é oferecer uma ferramenta simples e funcional para auxiliar professores do Ensino Fundamental 1 na criação de listas de exercícios personalizadas, utilizando IA para gerar questões educacionais a partir de parâmetros definidos pelo próprio professor.
 
-O sistema não tem como objetivo substituir o trabalho pedagógico do professor. A IA será usada como apoio inicial para geração de conteúdo, mas o professor continuará responsável por revisar, editar e validar as questões antes de utilizá-las com os alunos.
+O sistema não tem como objetivo substituir o trabalho pedagógico do professor. A IA será usada como apoio inicial para geração de conteúdo, mas o professor continuará responsável por revisar, editar e validar as questões antes de utilizá-las com os alunos. Esse cuidado é ainda mais importante no Fundamental 1, pois as atividades precisam respeitar o vocabulário, a faixa etária e o desenvolvimento de leitura dos estudantes.
 
 ---
 
@@ -125,20 +127,22 @@ A funcionalidade de IA será usada para gerar automaticamente listas de exercíc
 A IA receberá dados como:
 
 * Disciplina;
-* Ano escolar;
+* Ano escolar, limitado ao 1º, 2º, 3º, 4º ou 5º ano;
 * Assunto;
 * Quantidade de questões;
 * Dificuldade;
 * Tipo de questão;
 * Observações adicionais.
 
-Com base nesses dados, a IA deverá retornar uma lista de exercícios contendo:
+Com base nesses dados, a IA deverá retornar uma lista de exercícios adequada ao Ensino Fundamental 1, contendo:
 
 * Título da lista;
-* Enunciados das questões;
+* Enunciados curtos e claros;
 * Alternativas, quando o tipo for múltipla escolha;
 * Resposta correta;
-* Explicação resumida do gabarito.
+* Explicação resumida do gabarito em linguagem acessível ao professor.
+
+A IA deverá evitar conteúdos avançados demais para a faixa etária escolhida e adaptar o vocabulário conforme o ano escolar informado pelo professor.
 
 ### 7.2 Encaixe da IA no Fluxo do Usuário
 
@@ -158,22 +162,25 @@ Assim, a IA agrega valor real ao sistema, pois reduz o tempo necessário para cr
 ### 7.3 Exemplos de Prompt para a IA
 
 ```text
-Você é um assistente educacional para professores da educação básica.
+Você é um assistente educacional para professores do Ensino Fundamental 1.
+
+Gere questões com linguagem simples, enunciados curtos e conteúdo adequado ao ano escolar informado.
+Não use conteúdos avançados para a faixa etária.
 
 Gere uma lista de exercícios com as seguintes características:
 
 Disciplina: Matemática
-Ano escolar: 7º ano
-Assunto: Frações
+Ano escolar: 3º ano
+Assunto: Adição e subtração com números até 100
 Quantidade de questões: 5
-Dificuldade: Média
+Dificuldade: Fácil
 Tipo de questão: Múltipla escolha
-Observações: Use exemplos simples do cotidiano.
+Observações: Use exemplos simples do cotidiano escolar.
 
 Retorne apenas um JSON válido no seguinte formato:
 
 {
-  "titulo": "Lista de exercícios sobre frações",
+  "titulo": "Lista de exercícios sobre adição e subtração",
   "questoes": [
     {
       "enunciado": "...",
@@ -187,29 +194,32 @@ Retorne apenas um JSON válido no seguinte formato:
 ```
 
 ```text
-Você é um assistente educacional especializado em apoiar professores da educação básica.
+Você é um assistente educacional especializado em apoiar professores do Ensino Fundamental 1.
+
+Gere questões com linguagem adequada para crianças do 5º ano.
+Evite temas complexos demais e deixe a resposta esperada objetiva.
 
 Gere uma lista de exercícios com as seguintes características:
 
-Disciplina: História
-Ano escolar: 9º ano
-Assunto: Segunda Guerra Mundial
+Disciplina: Português
+Ano escolar: 5º ano
+Assunto: Interpretação de texto
 Quantidade de questões: 3
-Dificuldade: Difícil
+Dificuldade: Média
 Tipo de questão: Aberta (Discursiva)
-Observações: Exija que o aluno relacione causas econômicas e sociais na formulação da resposta.
+Observações: Use um texto curto e perguntas que peçam localização de informação e inferência simples.
 
 Retorne apenas um JSON válido no seguinte formato:
 
 {
-  "titulo": "Lista de exercícios discursivos sobre a Segunda Guerra Mundial",
+  "titulo": "Lista de exercícios discursivos sobre interpretação de texto",
   "questoes": [
     {
       "enunciado": "...",
       "resposta_esperada": "...",
       "criterios_de_correcao": [
-        "O aluno deve mencionar o fator X...", 
-        "O aluno deve relacionar com o evento Y..."
+        "O aluno deve localizar uma informação explícita no texto...", 
+        "O aluno deve explicar uma ideia com suas próprias palavras..."
       ]
     }
   ]
@@ -927,10 +937,10 @@ O projeto será considerado funcional se:
 
 ## 20. Pitch do Projeto
 
-O projeto é um sistema web para auxiliar professores da educação básica na criação de listas de exercícios personalizadas. O professor informa a disciplina, o ano escolar, o assunto, a quantidade de questões e o nível de dificuldade. A partir desses dados, a IA gera uma lista estruturada com enunciados, alternativas, gabarito e explicações. O professor pode revisar, editar e salvar a lista para reutilizar posteriormente. O sistema reduz o tempo gasto na preparação de atividades e oferece um apoio prático ao trabalho docente.
+O projeto é um sistema web para auxiliar professores do Ensino Fundamental 1, do 1º ao 5º ano, na criação de listas de exercícios personalizadas. O professor informa a disciplina, o ano escolar, o assunto, a quantidade de questões e o nível de dificuldade. A partir desses dados, a IA gera uma lista estruturada com enunciados simples, alternativas, gabarito e explicações. O professor pode revisar, editar e salvar a lista para reutilizar posteriormente. O sistema reduz o tempo gasto na preparação de atividades e oferece um apoio prático ao trabalho docente.
 
 ---
 
 ## 21. Conclusão
 
-O projeto foi planejado para ser um sistema pequeno, funcional e viável dentro do prazo da disciplina. O foco está em entregar um fluxo principal completo: cadastro, login, geração de lista com IA, revisão, salvamento e consulta posterior. A proposta atende a uma necessidade real de professores da educação básica e utiliza Inteligência Artificial como apoio direto ao processo de criação de materiais didáticos.
+O projeto foi planejado para ser um sistema pequeno, funcional e viável dentro do prazo da disciplina. O foco está em entregar um fluxo principal completo: cadastro, login, geração de lista com IA, revisão, salvamento e consulta posterior. A proposta atende a uma necessidade real de professores do Ensino Fundamental 1 e utiliza Inteligência Artificial como apoio direto ao processo de criação de materiais didáticos adequados à faixa etária dos alunos.
