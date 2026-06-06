@@ -4,14 +4,15 @@ import DashboardCard from "../components/DashboardCard";
 import RecentListCard from "../components/RecentListCard";
 import EmptyState from "../components/EmptyState";
 import { mockUser } from "../data/mockUser";
-import { mockExerciseLists } from "../data/mockExerciseLists";
+import { useExerciseLists } from "../context/useExerciseLists";
 
 export default function Dashboard() {
   const navigate = useNavigate();
+  const { exerciseLists } = useExerciseLists();
 
-  const totalLists = mockExerciseLists.length;
+  const totalLists = exerciseLists.length;
   const hasLists = totalLists > 0;
-  const recentLists = mockExerciseLists.slice(0, 3);
+  const recentLists = exerciseLists.slice(0, 3);
 
   return (
     <main className="min-h-screen bg-[#f7f7f8]">
