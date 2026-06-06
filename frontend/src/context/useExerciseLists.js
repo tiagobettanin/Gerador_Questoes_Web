@@ -1,12 +1,12 @@
 import { useContext } from "react";
-import { ExerciseListsContext } from "./ExerciseListsContext";
+import { ExerciseListContext } from "./ExerciseListContext";
 
 export function useExerciseLists() {
-  const context = useContext(ExerciseListsContext);
+  const context = useContext(ExerciseListContext);
 
   if (!context) {
     throw new Error(
-      "useExerciseLists deve ser usado dentro de ExerciseListsProvider"
+      "useExerciseLists deve ser usado dentro de ExerciseListProvider"
     );
   }
 

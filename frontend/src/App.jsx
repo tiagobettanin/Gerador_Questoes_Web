@@ -1,10 +1,10 @@
 import AppRoutes from "./routes/AppRoutes";
-import { ExerciseListsProvider } from "./context/ExerciseListsProvider";
+import { ExerciseListProvider } from "./context/ExerciseListProvider";
 
 export default function App() {
   return (
-    <ExerciseListsProvider>
+    <ExerciseListProvider>
       <AppRoutes />
-    </ExerciseListsProvider>
+    </ExerciseListProvider>
   );
 }

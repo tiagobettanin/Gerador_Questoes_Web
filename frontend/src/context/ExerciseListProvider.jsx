@@ -1,16 +1,20 @@
 import { useEffect, useState } from "react";
 import { mockExerciseLists } from "../data/mockExerciseLists";
-import { ExerciseListsContext } from "./ExerciseListsContext";
+import { ExerciseListContext } from "./ExerciseListContext";
 
-export function ExerciseListsProvider({ children }) {
+export function ExerciseListProvider({ children }) {
   const [exerciseLists, setExerciseLists] = useState(() => {
-    const savedLists = localStorage.getItem("exerciseLists");
+    try {
+      const savedLists = localStorage.getItem("exerciseLists");
 
-    if (savedLists) {
-      return JSON.parse(savedLists);
+      if (savedLists) {
+        return JSON.parse(savedLists);
+      }
+
+      return mockExerciseLists;
+    } catch {
+      return mockExerciseLists;
     }
-
-    return mockExerciseLists;
   });
 
   useEffect(() => {
@@ -40,7 +44,7 @@ export function ExerciseListsProvider({ children }) {
   }
 
   return (
-    <ExerciseListsContext.Provider
+    <ExerciseListContext.Provider
       value={{
         exerciseLists,
         addExerciseList,
@@ -50,6 +54,6 @@ export function ExerciseListsProvider({ children }) {
       }}
     >
       {children}
-    </ExerciseListsContext.Provider>
+    </ExerciseListContext.Provider>
   );
 }
