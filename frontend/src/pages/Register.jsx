@@ -1,0 +1,139 @@
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import Button from "../components/Button";
+import Input from "../components/Input";
+import LogoMark from "../components/LogoMark";
+
+export default function Register() {
+  const navigate = useNavigate();
+
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "professor@escola.com",
+    password: "12345678",
+    confirmPassword: "12345678",
+  });
+
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+
+  function updateField(field, value) {
+    setFormData({
+      ...formData,
+      [field]: value,
+    });
+  }
+
+  function handleSubmit(event) {
+    event.preventDefault();
+
+    if (
+      !formData.name.trim() ||
+      !formData.email.trim() ||
+      !formData.password.trim() ||
+      !formData.confirmPassword.trim()
+    ) {
+      setError("Preencha todos os campos para criar sua conta.");
+      setSuccess("");
+      return;
+    }
+
+    if (formData.password.length < 6) {
+      setError("A senha deve ter pelo menos 6 caracteres.");
+      setSuccess("");
+      return;
+    }
+
+    if (formData.password !== formData.confirmPassword) {
+      setError("As senhas não conferem.");
+      setSuccess("");
+      return;
+    }
+
+    setError("");
+    setSuccess("Conta criada com sucesso!");
+
+    setTimeout(() => {
+      navigate("/login");
+    }, 900);
+  }
+
+  return (
+    <main className="min-h-screen bg-[#eef4ff] flex items-center justify-center px-4">
+      <section className="w-full max-w-[448px] rounded-xl border border-gray-200 bg-white px-6 py-7 shadow-sm">
+        <div className="mb-6 text-center">
+          <LogoMark />
+
+          <h1 className="mt-5 text-3xl font-bold tracking-wide text-black">
+            Criar Conta
+          </h1>
+
+          <p className="mt-6 text-base text-gray-500">
+            Cadastre-se para começar a criar listas com IA
+          </p>
+        </div>
+
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <Input
+            label="Nome"
+            type="text"
+            placeholder="Seu nome completo"
+            value={formData.name}
+            onChange={(event) => updateField("name", event.target.value)}
+          />
+
+          <Input
+            label="E-mail"
+            type="email"
+            placeholder="professor@escola.com"
+            value={formData.email}
+            onChange={(event) => updateField("email", event.target.value)}
+          />
+
+          <Input
+            label="Senha"
+            type="password"
+            placeholder="Digite sua senha"
+            value={formData.password}
+            onChange={(event) => updateField("password", event.target.value)}
+          />
+
+          <Input
+            label="Confirmação de senha"
+            type="password"
+            placeholder="Confirme sua senha"
+            value={formData.confirmPassword}
+            onChange={(event) =>
+              updateField("confirmPassword", event.target.value)
+            }
+          />
+
+          {error && (
+            <p className="rounded-md bg-red-50 px-3 py-2 text-sm text-red-600">
+              {error}
+            </p>
+          )}
+
+          {success && (
+            <p className="rounded-md bg-green-50 px-3 py-2 text-sm text-green-700">
+              {success}
+            </p>
+          )}
+
+          <Button type="submit" className="w-full mt-3">
+            Criar conta
+          </Button>
+        </form>
+
+        <div className="mt-7 text-center">
+          <Link
+            to="/login"
+            className="text-sm font-medium text-blue-600 hover:underline"
+          >
+            Voltar para login
+          </Link>
+        </div>
+      </section>
+    </main>
+  );
+}
