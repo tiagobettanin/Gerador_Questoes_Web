@@ -13,6 +13,8 @@ export default function PreviewList() {
   const location = useLocation();
   const { addExerciseList } = useExerciseLists();
   const [list, setList] = useState(location.state?.generatedList || null);
+  const [error, setError] = useState("");
+  const [isSaving, setIsSaving] = useState(false);
 
   function updateQuestion(questionId, field, value) {
     setList((currentList) => ({
@@ -39,9 +41,17 @@ export default function PreviewList() {
     }));
   }
 
-  function handleSave() {
-    addExerciseList(list);
-    navigate("/my-lists");
+  async function handleSave() {
+    setIsSaving(true);
+    try {
+      await addExerciseList(list);
+      setError("");
+      navigate("/my-lists");
+    } catch (saveError) {
+      setError(saveError.message);
+    } finally {
+      setIsSaving(false);
+    }
   }
 
   if (!list) {
@@ -71,6 +81,11 @@ export default function PreviewList() {
               Prévia da lista
             </h1>
             <p className="mt-3 text-base text-gray-600">{list.title}</p>
+            {list.warning && (
+              <p className="mt-3 rounded-md bg-amber-50 px-3 py-2 text-sm text-amber-700">
+                {list.warning}
+              </p>
+            )}
           </div>
 
           <div className="flex flex-wrap gap-2">
@@ -87,7 +102,7 @@ export default function PreviewList() {
               className="rounded-xl border border-gray-200 bg-white p-6"
             >
               <h2 className="mb-5 text-lg font-bold text-black">
-                Questão {index + 1}
+                Questao {index + 1}
               </h2>
 
               <TextArea
@@ -143,8 +158,16 @@ export default function PreviewList() {
           ))}
         </div>
 
+        {error && (
+          <div className="mt-6">
+            <ErrorMessage>{error}</ErrorMessage>
+          </div>
+        )}
+
         <div className="mt-7 flex flex-wrap gap-3">
-          <Button onClick={handleSave}>Salvar lista</Button>
+          <Button onClick={handleSave}>
+            {isSaving ? "Salvando..." : "Salvar lista"}
+          </Button>
           <Button variant="secondary" onClick={() => navigate("/generate")}>
             Gerar novamente
           </Button>

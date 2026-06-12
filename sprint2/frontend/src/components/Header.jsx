@@ -1,9 +1,11 @@
 import { useNavigate } from "react-router-dom";
+import { clearAuthSession } from "../services/authService";
 
 export default function Header() {
   const navigate = useNavigate();
 
   function handleLogout() {
+    clearAuthSession();
     navigate("/login");
   }
 

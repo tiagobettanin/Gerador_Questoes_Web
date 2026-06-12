@@ -1,3 +1,4 @@
+import { useEffect, useEffectEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import Button from "../components/Button";
 import EmptyState from "../components/EmptyState";
@@ -7,13 +8,21 @@ import { useExerciseLists } from "../context/useExerciseLists";
 
 export default function MyLists() {
   const navigate = useNavigate();
-  const { exerciseLists, removeExerciseList } = useExerciseLists();
+  const { exerciseLists, removeExerciseList, isLoading, error, loadExerciseLists } =
+    useExerciseLists();
 
-  function handleDelete(listId) {
+  const syncLists = useEffectEvent(() => {
+    loadExerciseLists();
+  });
+
+  useEffect(() => {
+    syncLists();
+  }, []);
+
+  async function handleDelete(listId) {
     const shouldDelete = window.confirm("Deseja excluir esta lista?");
-
     if (shouldDelete) {
-      removeExerciseList(listId);
+      await removeExerciseList(listId);
     }
   }
 
@@ -35,7 +44,19 @@ export default function MyLists() {
           <Button onClick={() => navigate("/generate")}>Nova lista</Button>
         </div>
 
-        {exerciseLists.length > 0 ? (
+        {isLoading && (
+          <p className="mb-4 rounded-md bg-blue-50 px-4 py-3 text-sm text-blue-700">
+            Carregando listas...
+          </p>
+        )}
+
+        {error && !isLoading && (
+          <p className="mb-4 rounded-md bg-red-50 px-4 py-3 text-sm text-red-600">
+            {error}
+          </p>
+        )}
+
+        {!isLoading && exerciseLists.length > 0 ? (
           <div className="grid gap-5 md:grid-cols-2">
             {exerciseLists.map((list) => (
               <ExerciseListCard
@@ -46,9 +67,9 @@ export default function MyLists() {
               />
             ))}
           </div>
-        ) : (
+        ) : !isLoading ? (
           <EmptyState />
-        )}
+        ) : null}
       </section>
     </main>
   );

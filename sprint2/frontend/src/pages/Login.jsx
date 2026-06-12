@@ -1,17 +1,19 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import Button from "../components/Button";
 import Input from "../components/Input";
 import LogoMark from "../components/LogoMark";
+import { loginUser, saveAuthSession } from "../services/authService";
 
 export default function Login() {
   const navigate = useNavigate();
-
+  const location = useLocation();
   const [email, setEmail] = useState("professor@escola.com");
   const [password, setPassword] = useState("12345678");
   const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault();
 
     if (!email.trim() || !password.trim()) {
@@ -19,8 +21,20 @@ export default function Login() {
       return;
     }
 
-    setError("");
-    navigate("/dashboard");
+    setIsLoading(true);
+    try {
+      const response = await loginUser({
+        email: email.trim(),
+        password: password.trim(),
+      });
+      saveAuthSession(response.access_token, response.user);
+      setError("");
+      navigate(location.state?.from?.pathname || "/dashboard");
+    } catch (loginError) {
+      setError(loginError.message);
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   return (
@@ -61,8 +75,14 @@ export default function Login() {
             </p>
           )}
 
+          {isLoading && (
+            <p className="rounded-md bg-blue-50 px-3 py-2 text-sm text-blue-700">
+              Validando acesso...
+            </p>
+          )}
+
           <Button type="submit" className="w-full mt-3">
-            Entrar
+            {isLoading ? "Entrando..." : "Entrar"}
           </Button>
         </form>
 

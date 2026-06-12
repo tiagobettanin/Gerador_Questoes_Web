@@ -1,42 +1,60 @@
-import { useEffect, useState } from "react";
-import { mockExerciseLists } from "../data/mockExerciseLists";
+import { useState } from "react";
+import { clearAuthSession, getAccessToken } from "../services/authService";
+import {
+  createExerciseList,
+  deleteExerciseList,
+  fetchExerciseLists,
+  updateExerciseList as updateExerciseListRequest,
+} from "../services/exerciseService";
 import { ExerciseListContext } from "./ExerciseListContext";
 
 export function ExerciseListProvider({ children }) {
-  const [exerciseLists, setExerciseLists] = useState(() => {
-    try {
-      const savedLists = localStorage.getItem("exerciseLists");
+  const [exerciseLists, setExerciseLists] = useState([]);
+  const [isLoading, setIsLoading] = useState(Boolean(getAccessToken()));
+  const [error, setError] = useState("");
 
-      if (savedLists) {
-        return JSON.parse(savedLists);
-      }
-
-      return mockExerciseLists;
-    } catch {
-      return mockExerciseLists;
+  async function loadExerciseLists() {
+    if (!getAccessToken()) {
+      setExerciseLists([]);
+      setIsLoading(false);
+      setError("");
+      return;
     }
-  });
 
-  useEffect(() => {
-    localStorage.setItem("exerciseLists", JSON.stringify(exerciseLists));
-  }, [exerciseLists]);
-
-  function addExerciseList(newList) {
-    setExerciseLists((currentLists) => [newList, ...currentLists]);
+    setIsLoading(true);
+    try {
+      const lists = await fetchExerciseLists();
+      setExerciseLists(lists);
+      setError("");
+    } catch (loadError) {
+      if (loadError.status === 401) {
+        clearAuthSession();
+      }
+      setExerciseLists([]);
+      setError(loadError.message);
+    } finally {
+      setIsLoading(false);
+    }
+  }
+  async function addExerciseList(newList) {
+    const createdList = await createExerciseList(newList);
+    setExerciseLists((currentLists) => [createdList, ...currentLists]);
+    return createdList;
   }
 
-  function removeExerciseList(listId) {
+  async function removeExerciseList(listId) {
+    await deleteExerciseList(listId);
     setExerciseLists((currentLists) =>
       currentLists.filter((list) => list.id !== Number(listId))
     );
   }
 
-  function updateExerciseList(updatedList) {
+  async function updateExerciseList(updatedList) {
+    const savedList = await updateExerciseListRequest(updatedList.id, updatedList);
     setExerciseLists((currentLists) =>
-      currentLists.map((list) =>
-        list.id === updatedList.id ? updatedList : list
-      )
+      currentLists.map((list) => (list.id === savedList.id ? savedList : list))
     );
+    return savedList;
   }
 
   function getExerciseListById(listId) {
@@ -47,6 +65,9 @@ export function ExerciseListProvider({ children }) {
     <ExerciseListContext.Provider
       value={{
         exerciseLists,
+        isLoading,
+        error,
+        loadExerciseLists,
         addExerciseList,
         removeExerciseList,
         updateExerciseList,

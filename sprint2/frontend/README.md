@@ -1,16 +1,36 @@
-# React + Vite
+# Frontend - Sprint 3
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Frontend React/Vite do projeto AI Educacional.
 
-Currently, two official plugins are available:
+## Como rodar
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+```bash
+cd sprint2/frontend
+npm install
+npm run dev
+```
 
-## React Compiler
+## Variaveis de ambiente
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Crie um arquivo `.env` com base em `.env.example`.
 
-## Expanding the ESLint configuration
+```text
+VITE_API_URL=http://127.0.0.1:8000
+```
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Scripts
+
+```bash
+npm run dev
+npm run build
+npm run lint
+```
+
+## O que mudou na Sprint 3
+
+- Login e cadastro agora usam backend real.
+- Token JWT e salvo no `localStorage`.
+- Rotas internas exigem autenticacao.
+- Dashboard, Minhas Listas e Detalhes usam a API.
+- Gerar Lista chama a rota de IA stub do backend.
+- Salvar e excluir listas agora usam CRUD real.

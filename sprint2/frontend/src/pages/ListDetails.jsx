@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Badge from "../components/Badge";
 import Button from "../components/Button";
@@ -5,20 +6,63 @@ import ErrorMessage from "../components/ErrorMessage";
 import Header from "../components/Header";
 import QuestionCard from "../components/QuestionCard";
 import { useExerciseLists } from "../context/useExerciseLists";
+import { fetchExerciseListById } from "../services/exerciseService";
 
 export default function ListDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { getExerciseListById, removeExerciseList } = useExerciseLists();
-  const list = getExerciseListById(id);
+  const [list, setList] = useState(() => getExerciseListById(id));
+  const [isLoading, setIsLoading] = useState(!list);
+  const [error, setError] = useState("");
 
-  function handleDelete() {
+  useEffect(() => {
+    let isMounted = true;
+
+    async function loadList() {
+      try {
+        const response = await fetchExerciseListById(id);
+        if (isMounted) {
+          setList(response);
+          setError("");
+        }
+      } catch (loadError) {
+        if (isMounted) {
+          setError(loadError.message);
+        }
+      } finally {
+        if (isMounted) {
+          setIsLoading(false);
+        }
+      }
+    }
+
+    loadList();
+    return () => {
+      isMounted = false;
+    };
+  }, [id]);
+
+  async function handleDelete() {
     const shouldDelete = window.confirm("Deseja excluir esta lista?");
 
     if (shouldDelete) {
-      removeExerciseList(id);
+      await removeExerciseList(id);
       navigate("/my-lists");
     }
+  }
+
+  if (isLoading) {
+    return (
+      <main className="min-h-screen bg-[#f7f7f8]">
+        <Header />
+        <section className="mx-auto max-w-[960px] px-6 py-9">
+          <p className="rounded-md bg-blue-50 px-4 py-3 text-sm text-blue-700">
+            Carregando lista...
+          </p>
+        </section>
+      </main>
+    );
   }
 
   if (!list) {
@@ -26,7 +70,7 @@ export default function ListDetails() {
       <main className="min-h-screen bg-[#f7f7f8]">
         <Header />
         <section className="mx-auto max-w-[960px] px-6 py-9">
-          <ErrorMessage>Lista não encontrada.</ErrorMessage>
+          <ErrorMessage>{error || "Lista não encontrada."}</ErrorMessage>
           <div className="mt-5">
             <Button onClick={() => navigate("/my-lists")}>
               Voltar para minhas listas

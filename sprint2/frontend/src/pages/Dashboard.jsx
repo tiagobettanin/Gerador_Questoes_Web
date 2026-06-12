@@ -1,14 +1,64 @@
+import { useEffect, useEffectEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Header from "../components/Header";
 import DashboardCard from "../components/DashboardCard";
-import RecentListCard from "../components/RecentListCard";
 import EmptyState from "../components/EmptyState";
-import { mockUser } from "../data/mockUser";
+import Header from "../components/Header";
+import RecentListCard from "../components/RecentListCard";
 import { useExerciseLists } from "../context/useExerciseLists";
+import {
+  clearAuthSession,
+  fetchCurrentUser,
+  getAccessToken,
+  getStoredUser,
+  saveAuthSession,
+} from "../services/authService";
 
 export default function Dashboard() {
   const navigate = useNavigate();
-  const { exerciseLists } = useExerciseLists();
+  const { exerciseLists, isLoading, error, loadExerciseLists } = useExerciseLists();
+  const [userName, setUserName] = useState(getStoredUser()?.name || "Professor(a)");
+
+  const syncDashboardData = useEffectEvent(async () => {
+    let isMounted = true;
+
+    if (!getAccessToken()) {
+      return () => {
+        isMounted = false;
+      };
+    }
+
+    try {
+      const user = await fetchCurrentUser();
+      if (isMounted) {
+        setUserName(user.name);
+      }
+      saveAuthSession(getAccessToken(), user);
+      await loadExerciseLists();
+    } catch (userError) {
+      if (userError.status === 401) {
+        clearAuthSession();
+        navigate("/login");
+      }
+    }
+
+    return () => {
+      isMounted = false;
+    };
+  });
+
+  useEffect(() => {
+    let cleanup = () => {};
+
+    async function run() {
+      const maybeCleanup = await syncDashboardData();
+      if (typeof maybeCleanup === "function") {
+        cleanup = maybeCleanup;
+      }
+    }
+
+    run();
+    return () => cleanup();
+  }, [navigate]);
 
   const totalLists = exerciseLists.length;
   const hasLists = totalLists > 0;
@@ -21,7 +71,7 @@ export default function Dashboard() {
       <section className="mx-auto max-w-[1216px] px-6 py-9">
         <div>
           <h1 className="text-3xl font-bold tracking-wide text-black">
-            Olá, Professor(a) {mockUser.name}
+            Olá, Professor(a) {userName}
           </h1>
 
           <p className="mt-3 text-base text-gray-600">
@@ -29,10 +79,7 @@ export default function Dashboard() {
           </p>
         </div>
 
-        <DashboardCard
-            total={totalLists}
-            onClick={() => navigate("/my-lists")}
-        />
+        <DashboardCard total={totalLists} onClick={() => navigate("/my-lists")} />
 
         <section className="mt-8 rounded-xl bg-indigo-600 px-6 py-8 text-white">
           <h2 className="text-2xl font-bold">Criar Nova Lista com IA</h2>
@@ -81,19 +128,31 @@ export default function Dashboard() {
             )}
           </div>
 
-          {hasLists ? (
+          {isLoading && (
+            <p className="mb-4 rounded-md bg-blue-50 px-4 py-3 text-sm text-blue-700">
+              Carregando listas...
+            </p>
+          )}
+
+          {error && !isLoading && (
+            <p className="mb-4 rounded-md bg-red-50 px-4 py-3 text-sm text-red-600">
+              {error}
+            </p>
+          )}
+
+          {!isLoading && hasLists ? (
             <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
               {recentLists.map((list) => (
                 <RecentListCard
                   key={list.id}
                   list={list}
                   onClick={() => navigate(`/list/${list.id}`)}
-                />  
+                />
               ))}
             </div>
-          ) : (
+          ) : !isLoading ? (
             <EmptyState />
-          )}
+          ) : null}
         </section>
       </section>
     </main>

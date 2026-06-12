@@ -7,7 +7,7 @@ import Input from "../components/Input";
 import LoadingMessage from "../components/LoadingMessage";
 import Select from "../components/Select";
 import TextArea from "../components/TextArea";
-import { mockGenerateExerciseList } from "../data/mockGenerateExerciseList";
+import { generateExerciseList } from "../services/aiService";
 
 const subjects = ["Português", "Matemática", "Ciências", "História", "Geografia"];
 const schoolYears = ["1º ano", "2º ano", "3º ano", "4º ano", "5º ano"];
@@ -58,11 +58,10 @@ export default function GenerateList() {
     return "";
   }
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault();
 
     const validationError = validateForm();
-
     if (validationError) {
       setError(validationError);
       return;
@@ -71,11 +70,14 @@ export default function GenerateList() {
     setError("");
     setIsLoading(true);
 
-    setTimeout(() => {
-      const generatedList = mockGenerateExerciseList(formData);
-      setIsLoading(false);
+    try {
+      const generatedList = await generateExerciseList(formData);
       navigate("/preview", { state: { generatedList } });
-    }, 900);
+    } catch (generateError) {
+      setError(generateError.message);
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   function handleClear() {
@@ -112,9 +114,7 @@ export default function GenerateList() {
             <Select
               label="Ano escolar"
               value={formData.schoolYear}
-              onChange={(event) =>
-                updateField("schoolYear", event.target.value)
-              }
+              onChange={(event) => updateField("schoolYear", event.target.value)}
               options={schoolYears}
             />
 
@@ -128,9 +128,7 @@ export default function GenerateList() {
             <Select
               label="Dificuldade"
               value={formData.difficulty}
-              onChange={(event) =>
-                updateField("difficulty", event.target.value)
-              }
+              onChange={(event) => updateField("difficulty", event.target.value)}
               options={difficulties}
             />
 
@@ -145,9 +143,7 @@ export default function GenerateList() {
             <Select
               label="Tipo de questão"
               value={formData.questionType}
-              onChange={(event) =>
-                updateField("questionType", event.target.value)
-              }
+              onChange={(event) => updateField("questionType", event.target.value)}
               options={questionTypes}
             />
           </div>
@@ -157,9 +153,7 @@ export default function GenerateList() {
               label="Observações opcionais"
               placeholder="Ex: usar exemplos do cotidiano e frases curtas"
               value={formData.observations}
-              onChange={(event) =>
-                updateField("observations", event.target.value)
-              }
+              onChange={(event) => updateField("observations", event.target.value)}
             />
           </div>
 

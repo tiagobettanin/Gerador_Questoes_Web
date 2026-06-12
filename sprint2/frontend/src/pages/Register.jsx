@@ -3,19 +3,19 @@ import { Link, useNavigate } from "react-router-dom";
 import Button from "../components/Button";
 import Input from "../components/Input";
 import LogoMark from "../components/LogoMark";
+import { registerUser } from "../services/authService";
 
 export default function Register() {
   const navigate = useNavigate();
-
   const [formData, setFormData] = useState({
     name: "",
     email: "professor@escola.com",
     password: "12345678",
     confirmPassword: "12345678",
   });
-
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   function updateField(field, value) {
     setFormData({
@@ -24,7 +24,7 @@ export default function Register() {
     });
   }
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault();
 
     if (
@@ -45,17 +45,29 @@ export default function Register() {
     }
 
     if (formData.password !== formData.confirmPassword) {
-      setError("As senhas não conferem.");
+      setError("As senhas nao conferem.");
       setSuccess("");
       return;
     }
 
-    setError("");
-    setSuccess("Conta criada com sucesso!");
-
-    setTimeout(() => {
-      navigate("/login");
-    }, 900);
+    setIsLoading(true);
+    try {
+      await registerUser({
+        name: formData.name.trim(),
+        email: formData.email.trim(),
+        password: formData.password.trim(),
+      });
+      setError("");
+      setSuccess("Conta criada com sucesso!");
+      setTimeout(() => {
+        navigate("/login");
+      }, 900);
+    } catch (registerError) {
+      setError(registerError.message);
+      setSuccess("");
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   return (
@@ -121,7 +133,7 @@ export default function Register() {
           )}
 
           <Button type="submit" className="w-full mt-3">
-            Criar conta
+            {isLoading ? "Criando conta..." : "Criar conta"}
           </Button>
         </form>
 
