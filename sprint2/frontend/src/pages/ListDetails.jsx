@@ -7,6 +7,7 @@ import Header from "../components/Header";
 import QuestionCard from "../components/QuestionCard";
 import { useExerciseLists } from "../context/useExerciseLists";
 import { fetchExerciseListById } from "../services/exerciseService";
+import { exportExerciseListToDocx } from "../services/docxService";
 
 export default function ListDetails() {
   const { id } = useParams();
@@ -15,6 +16,7 @@ export default function ListDetails() {
   const [list, setList] = useState(() => getExerciseListById(id));
   const [isLoading, setIsLoading] = useState(!list);
   const [error, setError] = useState("");
+  const [exportingDocx, setExportingDocx] = useState(false);
 
   useEffect(() => {
     let isMounted = true;
@@ -51,6 +53,18 @@ export default function ListDetails() {
       navigate("/my-lists");
     }
   }
+
+  async function handleExportDocx() {
+  try {
+    setExportingDocx(true);
+    await exportExerciseListToDocx(list);
+  } catch (error) {
+    alert("Não foi possível gerar o arquivo .docx.");
+    console.error(error);
+  } finally {
+    setExportingDocx(false);
+  }
+}
 
   if (isLoading) {
     return (
@@ -97,6 +111,13 @@ export default function ListDetails() {
           </div>
 
           <div className="flex flex-wrap gap-3">
+            <Button
+              variant="secondary"
+              onClick={handleExportDocx}
+              disabled={exportingDocx || !list}
+            >
+              {exportingDocx ? "Gerando .docx..." : "Gerar .docx"}
+            </Button>
             <Button variant="secondary" onClick={() => navigate("/my-lists")}>
               Voltar
             </Button>

@@ -9,9 +9,9 @@ export default function Register() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: "",
-    email: "professor@escola.com",
-    password: "12345678",
-    confirmPassword: "12345678",
+    email: "",
+    password: "",
+    confirmPassword: "",
   });
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");

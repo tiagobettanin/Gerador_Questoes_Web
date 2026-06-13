@@ -10,7 +10,7 @@ import TextArea from "../components/TextArea";
 import { generateExerciseList } from "../services/aiService";
 
 const subjects = ["Português", "Matemática", "Ciências", "História", "Geografia"];
-const schoolYears = ["1º ano", "2º ano", "3º ano", "4º ano", "5º ano"];
+const schoolYears = ["6º ano", "7º ano", "8º ano", "9º ano"];
 const difficulties = ["Fácil", "Média", "Difícil"];
 const questionTypes = ["Múltipla escolha", "Discursiva"];
 
@@ -95,7 +95,7 @@ export default function GenerateList() {
             Gerar lista com IA
           </h1>
           <p className="mt-3 text-base text-gray-600">
-            Crie questões para turmas do 1º ao 5º ano do Fundamental.
+            Crie questões para turmas do 6º ao 9º ano do Fundamental.
           </p>
         </div>
 
