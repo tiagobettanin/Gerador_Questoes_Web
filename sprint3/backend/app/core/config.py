@@ -19,6 +19,10 @@ class Settings(BaseModel):
     access_token_expire_minutes: int = Field(default=60)
     frontend_url: str = Field(default="http://localhost:5173")
 
+    openai_api_key: str | None = Field(default=None)
+    openai_model: str = Field(default="gpt-4.1-mini")
+    use_real_ai: bool = Field(default=False)
+
     @property
     def cors_origins(self) -> list[str]:
         origins = {
@@ -43,4 +47,8 @@ def get_settings() -> Settings:
         algorithm=os.getenv("ALGORITHM", "HS256"),
         access_token_expire_minutes=int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", "60")),
         frontend_url=os.getenv("FRONTEND_URL", "http://localhost:5173"),
+
+        openai_api_key=os.getenv("OPENAI_API_KEY"),
+        openai_model=os.getenv("OPENAI_MODEL", "gpt-4.1-mini"),
+        use_real_ai=os.getenv("USE_REAL_AI", "false").lower() == "true",
     )
