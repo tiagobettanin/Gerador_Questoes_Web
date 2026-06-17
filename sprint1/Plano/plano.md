@@ -14,18 +14,18 @@
 
 **Integrantes da dupla:**
 
-* Integrante 1:
-* Integrante 2:
+* Integrante 1: Gabriel Ferragini
+* Integrante 2: Tiago Bettanin
 
 ---
 
 ## 2. Descrição do Problema
 
-Professores do Ensino Fundamental 1, especialmente do 1º ao 5º ano, frequentemente precisam preparar listas de exercícios para diferentes turmas, disciplinas, anos escolares e níveis de dificuldade. Esse processo pode ser repetitivo e consumir muito tempo, principalmente quando o professor precisa adaptar as atividades para conteúdos específicos, linguagem adequada à idade dos alunos e turmas com diferentes ritmos de aprendizagem.
+Professores do Ensino Fundamental 2, especialmente do 6º ao 9º ano, frequentemente precisam preparar listas de exercícios para diferentes turmas, disciplinas, anos escolares e níveis de dificuldade. Esse processo pode ser repetitivo e consumir muito tempo, principalmente quando o professor precisa adaptar as atividades para conteúdos específicos, linguagem adequada à idade dos alunos e turmas com diferentes ritmos de aprendizagem.
 
 Além disso, muitas vezes o professor precisa criar questões com alternativas, gabarito e explicações, o que exige planejamento e revisão. Quando há pouco tempo disponível, a criação desse material pode se tornar trabalhosa e limitar a variedade das atividades oferecidas aos alunos.
 
-O AI busca apoiar esse processo por meio de um sistema web que permite ao professor do Fundamental 1 gerar listas de exercícios personalizadas com auxílio de IA. O professor informa dados como disciplina, ano escolar, assunto, quantidade de questões, dificuldade e observações. A IA gera uma lista estruturada com enunciados curtos, alternativas, resposta correta e explicação em linguagem simples. Depois disso, o professor pode revisar, editar e salvar a lista para uso posterior.
+O AI busca apoiar esse processo por meio de um sistema web que permite ao professor do Fundamental 2 gerar listas de exercícios personalizadas com auxílio de IA. O professor informa dados como disciplina, ano escolar, assunto, quantidade de questões, dificuldade e observações. A IA gera uma lista estruturada com enunciados curtos, alternativas, resposta correta e explicação em linguagem simples. Depois disso, o professor pode revisar, editar e salvar a lista para uso posterior.
 
 ---
 
@@ -33,7 +33,7 @@ O AI busca apoiar esse processo por meio de um sistema web que permite ao profes
 
 ### 3.1 Usuário Principal
 
-O usuário principal do sistema é o **professor do Ensino Fundamental 1**, atuando principalmente com turmas do **1º ao 5º ano**. Esse professor precisa preparar atividades, revisões, exercícios de fixação, tarefas de casa ou avaliações simples para crianças em fase de alfabetização e consolidação dos conhecimentos básicos.
+O usuário principal do sistema é o **professor do Ensino fundamental 2**, atuando principalmente com turmas do **6º ao 9º ano**. Esse professor precisa preparar atividades, revisões, exercícios de fixação, tarefas de casa ou avaliações simples para crianças em fase de alfabetização e consolidação dos conhecimentos básicos.
 
 ### 3.2 Necessidades do Usuário
 
@@ -42,8 +42,8 @@ O professor precisa:
 * Criar listas de exercícios de forma rápida;
 * Personalizar as questões por disciplina, assunto, ano escolar e dificuldade;
 * Receber questões com gabarito e explicação;
-* Gerar questões com linguagem simples e adequada ao 1º, 2º, 3º, 4º ou 5º ano;
-* Priorizar conteúdos comuns do Fundamental 1, como Português, Matemática, Ciências, História e Geografia;
+* Gerar questões com linguagem simples e adequada ao 6º, 7º, 8º ou 9º ano;
+* Priorizar conteúdos comuns do fundamental 2, como Português, Matemática, Ciências, História e Geografia;
 * Revisar o conteúdo gerado antes de salvar;
 * Armazenar listas já criadas para reutilização;
 * Consultar listas antigas quando necessário.
@@ -52,9 +52,9 @@ O professor precisa:
 
 ## 4. Objetivo do Sistema
 
-O objetivo do projeto é oferecer uma ferramenta simples e funcional para auxiliar professores do Ensino Fundamental 1 na criação de listas de exercícios personalizadas, utilizando IA para gerar questões educacionais a partir de parâmetros definidos pelo próprio professor.
+O objetivo do projeto é oferecer uma ferramenta simples e funcional para auxiliar professores do Ensino fundamental 2 na criação de listas de exercícios personalizadas, utilizando IA para gerar questões educacionais a partir de parâmetros definidos pelo próprio professor.
 
-O sistema não tem como objetivo substituir o trabalho pedagógico do professor. A IA será usada como apoio inicial para geração de conteúdo, mas o professor continuará responsável por revisar, editar e validar as questões antes de utilizá-las com os alunos. Esse cuidado é ainda mais importante no Fundamental 1, pois as atividades precisam respeitar o vocabulário, a faixa etária e o desenvolvimento de leitura dos estudantes.
+O sistema não tem como objetivo substituir o trabalho pedagógico do professor. A IA será usada como apoio inicial para geração de conteúdo, mas o professor continuará responsável por revisar, editar e validar as questões antes de utilizá-las com os alunos. Esse cuidado é ainda mais importante no fundamental 2, pois as atividades precisam respeitar o vocabulário, a faixa etária e o desenvolvimento de leitura dos estudantes.
 
 ---
 
@@ -83,7 +83,7 @@ O sistema deverá permitir:
 
 As seguintes funcionalidades não farão parte do escopo principal e só serão consideradas caso sobre tempo:
 
-* Exportação em PDF;
+* Exportação em .docx;
 * Upload de arquivos.
 
 A decisão de deixar essas funcionalidades fora do escopo inicial tem como objetivo manter o projeto viável dentro do tempo disponível e garantir que o fluxo principal seja entregue com qualidade.
@@ -127,14 +127,14 @@ A funcionalidade de IA será usada para gerar automaticamente listas de exercíc
 A IA receberá dados como:
 
 * Disciplina;
-* Ano escolar, limitado ao 1º, 2º, 3º, 4º ou 5º ano;
+* Ano escolar, limitado ao 6º, 7º, 8º ou 9º ano;;
 * Assunto;
 * Quantidade de questões;
 * Dificuldade;
 * Tipo de questão;
 * Observações adicionais.
 
-Com base nesses dados, a IA deverá retornar uma lista de exercícios adequada ao Ensino Fundamental 1, contendo:
+Com base nesses dados, a IA deverá retornar uma lista de exercícios adequada ao Ensino fundamental 2, contendo:
 
 * Título da lista;
 * Enunciados curtos e claros;
@@ -162,7 +162,7 @@ Assim, a IA agrega valor real ao sistema, pois reduz o tempo necessário para cr
 ### 7.3 Exemplos de Prompt para a IA
 
 ```text
-Você é um assistente educacional para professores do Ensino Fundamental 1.
+Você é um assistente educacional para professores do Ensino fundamental 2.
 
 Gere questões com linguagem simples, enunciados curtos e conteúdo adequado ao ano escolar informado.
 Não use conteúdos avançados para a faixa etária.
@@ -194,7 +194,7 @@ Retorne apenas um JSON válido no seguinte formato:
 ```
 
 ```text
-Você é um assistente educacional especializado em apoiar professores do Ensino Fundamental 1.
+Você é um assistente educacional especializado em apoiar professores do Ensino fundamental 2.
 
 Gere questões com linguagem adequada para crianças do 5º ano.
 Evite temas complexos demais e deixe a resposta esperada objetiva.
@@ -937,10 +937,10 @@ O projeto será considerado funcional se:
 
 ## 20. Pitch do Projeto
 
-O projeto é um sistema web para auxiliar professores do Ensino Fundamental 1, do 1º ao 5º ano, na criação de listas de exercícios personalizadas. O professor informa a disciplina, o ano escolar, o assunto, a quantidade de questões e o nível de dificuldade. A partir desses dados, a IA gera uma lista estruturada com enunciados simples, alternativas, gabarito e explicações. O professor pode revisar, editar e salvar a lista para reutilizar posteriormente. O sistema reduz o tempo gasto na preparação de atividades e oferece um apoio prático ao trabalho docente.
+O projeto é um sistema web para auxiliar professores do Ensino fundamental 2, do 6º ao 9º ano, na criação de listas de exercícios personalizadas. O professor informa a disciplina, o ano escolar, o assunto, a quantidade de questões e o nível de dificuldade. A partir desses dados, a IA gera uma lista estruturada com enunciados simples, alternativas, gabarito e explicações. O professor pode revisar, editar e salvar a lista para reutilizar posteriormente. O sistema reduz o tempo gasto na preparação de atividades e oferece um apoio prático ao trabalho docente.
 
 ---
 
 ## 21. Conclusão
 
-O projeto foi planejado para ser um sistema pequeno, funcional e viável dentro do prazo da disciplina. O foco está em entregar um fluxo principal completo: cadastro, login, geração de lista com IA, revisão, salvamento e consulta posterior. A proposta atende a uma necessidade real de professores do Ensino Fundamental 1 e utiliza Inteligência Artificial como apoio direto ao processo de criação de materiais didáticos adequados à faixa etária dos alunos.
+O projeto foi planejado para ser um sistema pequeno, funcional e viável dentro do prazo da disciplina. O foco está em entregar um fluxo principal completo: cadastro, login, geração de lista com IA, revisão, salvamento e consulta posterior. A proposta atende a uma necessidade real de professores do Ensino fundamental 2 e utiliza Inteligência Artificial como apoio direto ao processo de criação de materiais didáticos adequados à faixa etária dos alunos.
