@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { clearAuthSession } from "../services/authService";
+import Button from "./Button";
 
 export default function Header() {
   const navigate = useNavigate();
@@ -32,24 +33,48 @@ export default function Header() {
           </span>
         </div>
 
-        <button
-          onClick={handleLogout}
-          className="flex h-8 items-center gap-2 rounded-md border border-gray-300 bg-white px-4 text-sm font-semibold text-black hover:bg-gray-50"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-4 w-4"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            strokeWidth="2"
+        <div className="flex items-center gap-3">
+          <Button
+            variant="ghost"
+            size="sm"
+            href={`${import.meta.env.BASE_URL}manual-usuario.pdf`}
+            download="manual-usuario.pdf"
+            className="text-black/60 hover:text-black"
           >
-            <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
-            <path d="M10 17l5-5-5-5" />
-            <path d="M15 12H3" />
-          </svg>
-          Sair
-        </button>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-4 w-4"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth="2"
+            >
+              <path d="M12 3v12" />
+              <path d="M7 10l5 5 5-5" />
+              <path d="M5 21h14" />
+            </svg>
+            Manual do Usuário
+          </Button>
+
+          <button
+            onClick={handleLogout}
+            className="flex h-8 items-center gap-2 rounded-md border border-gray-300 bg-white px-4 text-sm font-semibold text-black hover:bg-gray-50"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-4 w-4"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth="2"
+            >
+              <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
+              <path d="M10 17l5-5-5-5" />
+              <path d="M15 12H3" />
+            </svg>
+            Sair
+          </button>
+        </div>
       </div>
     </header>
   );
