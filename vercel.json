@@ -4,11 +4,6 @@
       "entrypoint": "sprint2/frontend",
       "routePrefix": "/",
       "framework": "vite"
-    },
-    "backend": {
-      "entrypoint": "sprint3/backend",
-      "routePrefix": "/_/backend",
-      "framework": "fastapi"
     }
   }
 }
