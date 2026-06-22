@@ -2,6 +2,8 @@
 
 Projeto academico de Desenvolvimento Web para apoiar professores do Ensino Fundamental 1 na criacao de listas de exercicios.
 
+[Link Público](https://questoes-tau.vercel.app/login)
+
 ## Estrutura do projeto
 
 ```text
